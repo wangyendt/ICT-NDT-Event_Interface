@@ -23,8 +23,8 @@ namespace ICT_NDT_Event_Interface
         {
             BX = 1,
             Device_Name = 4,
-            TestVal = 14,
-            Result = 16,
+            TestVal = 19,
+            Result = 21,
             TestMode = 9,
         }
 
@@ -145,9 +145,9 @@ namespace ICT_NDT_Event_Interface
                             Console.WriteLine("*********************************");
                             for (int j = batch_modify_index_start; j < i + 1 - data_offset; j++)
                             {
-                                Console.WriteLine("i: " + i + ", j:" + j + ", " + dt.Rows.Count + "  -0-0-0-0-0-");
-                                dt.Rows[j][9] = bVoltagePass ? "PASS" : "NG";
-                                dt.Rows[j][10] = bResistancePass ? "PASS" : "NG";
+                                Console.WriteLine("i: " + i + ", j:" + j + ", " + dt.Rows.Count + "  -0-0-0-0-0- " + bVoltagePass + " " + bResistancePass);
+                                dt.Rows[j][9] = bVoltagePass ? "Pass" : "NG";
+                                dt.Rows[j][10] = bResistancePass ? "Pass" : "NG";
                             }
                             batch_modify_index_start = i + 1 - data_offset;
                             bVoltagePass = true;
@@ -155,13 +155,13 @@ namespace ICT_NDT_Event_Interface
                         }
                         else
                         {
-                            if (dataCurrent[(int)DataColumn.TestMode] == "CV")
+                            if (dataCurrent[(int)DataColumn.TestMode].Trim() == "CV")
                             {
-                                bResistancePass &= dataCurrent[(int)DataColumn.Result] == "Pass";
+                                bResistancePass = bResistancePass && dataCurrent[(int)DataColumn.Result].Trim() == "Pass";
                             }
                             else
                             {
-                                bVoltagePass &= dataCurrent[(int)DataColumn.Result] == "Pass";
+                                bVoltagePass = bVoltagePass && dataCurrent[(int)DataColumn.Result].Trim() == "Pass";
                             }
                         }
                         //Console.WriteLine(dt.Rows.Count+" "+dt.Columns.Count);
@@ -190,7 +190,7 @@ namespace ICT_NDT_Event_Interface
                 {
                     Console.WriteLine(dt.Rows[r][c]);
                 }
-//                return;
+                return;
             }
 
             CSVHelper.SaveToCSV(dt, @"C:\Users\lenovo\Desktop\test.csv");

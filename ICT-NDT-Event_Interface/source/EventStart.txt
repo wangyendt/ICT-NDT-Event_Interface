@@ -1,0 +1,4 @@
+Path = E:\Programmes\GitHub\CSharp\ICT-NDT-Event_Interface\ICT-NDT-Event_Interface\source\00001340_2018_08_15_19_00_28-exporting_data2.csv
+DeviceID = 1234
+WorkerID = James
+ProceduceID = a1b2

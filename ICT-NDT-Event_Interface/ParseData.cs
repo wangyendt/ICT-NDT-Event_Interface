@@ -127,7 +127,7 @@ namespace ICT_NDT_Event_Interface
                             dataCurrent[(int)DataColumn.BX],
                             dataCurrent[(int)DataColumn.Device_Name],
                             dataCurrent[(int)DataColumn.TestVal],
-                            dataCurrent[(int)DataColumn.Result],
+                            dataCurrent[(int)DataColumn.Result].Trim(),
                             _contents[0][0],
                             _contents[0][1],
                             _contents[0][2],
@@ -190,7 +190,7 @@ namespace ICT_NDT_Event_Interface
                 {
                     Console.WriteLine(dt.Rows[r][c]);
                 }
-                return;
+//                return;
             }
 
             CSVHelper.SaveToCSV(dt, @"C:\Users\lenovo\Desktop\test.csv");

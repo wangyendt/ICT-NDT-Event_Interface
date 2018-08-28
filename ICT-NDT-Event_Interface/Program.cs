@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Data;
 using System.Text;
 
 namespace ICT_NDT_Event_Interface
@@ -11,7 +11,10 @@ namespace ICT_NDT_Event_Interface
             ImportFile file = new ImportFile(path);
             object parameters = file.read_parameters();
             StringBuilder sb = file.read_log_data();
-            ParseData.parse_data_into_datatable(sb, parameters);
+            DataTable dt = ParseData.parse_data_into_datatable(sb, parameters);
+            //            SqlServerHelper.SQLConn();
+            SqlServerHelper.SQLConn(dt);
+//            SqlServerHelper.DataTableToSQLServer(dt);
             //Console.ReadKey();
         }
     }

@@ -19,7 +19,7 @@ namespace ICT_NDT_Event_Interface
                 dataTable.Columns.Add("N_ShortTest", typeof(string));
                 dataTable.Columns.Add("N_VoltageResult", typeof(string));
                 dataTable.Columns.Add("N_ResistanceResult", typeof(string));
-                dataTable.Columns.Add("N_MachineNo", typeof(string));
+                dataTable.Columns.Add("N_MachineID", typeof(string));
                 dataTable.Columns.Add("N_Operator", typeof(string));
                 dataTable.Columns.Add("N_TestType", typeof(string));
                 return dataTable;

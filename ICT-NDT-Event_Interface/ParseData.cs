@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
+using System.Data.SqlClient;
 using System.Text;
 
 namespace ICT_NDT_Event_Interface
@@ -51,7 +51,7 @@ namespace ICT_NDT_Event_Interface
             }
         }
 
-        public static void parse_data_into_datatable(StringBuilder sb, object parameters)
+        public static DataTable parse_data_into_datatable(StringBuilder sb, object parameters)
         {
             DataTable dt = CreateTable.create_data_table();
             create_features();
@@ -85,7 +85,12 @@ namespace ICT_NDT_Event_Interface
                         {
                             if (strInfos[i].Contains(fea))
                             {
-                                _contents[_step].Add(strInfos[i].Split(',')[1]);
+                                string str_ = strInfos[i].Split(',')[1];
+                                if (fea.Contains("DateTime"))
+                                {
+                                    str_ = Convert.ToDateTime(str_).ToString("yyyyMMdd hh:mm:ss");
+                                }
+                                _contents[_step].Add(str_);
                                 _head_features.RemoveAt(0);
                                 if (_head_features.Count == 0)
                                 {
@@ -173,14 +178,14 @@ namespace ICT_NDT_Event_Interface
 
             foreach (var item in _contents[0])
             {
-                Console.WriteLine(item);
+                //                Console.WriteLine(item);
             }
 
             foreach (var item in _contents[1])
             {
                 foreach (var subitem in (List<object>)item)
                 {
-                    Console.WriteLine(subitem + " " + ((List<object>)item).Count + " " + _contents[1].Count);
+                    //                    Console.WriteLine(subitem + " " + ((List<object>)item).Count + " " + _contents[1].Count);
                 }
             }
 
@@ -188,12 +193,14 @@ namespace ICT_NDT_Event_Interface
             {
                 for (int c = 0; c < dt.Columns.Count; c++)
                 {
-                    Console.WriteLine(dt.Rows[r][c]);
+                    //                    Console.WriteLine(dt.Rows[r][c]);
                 }
-//                return;
+                //                return;
             }
 
             CSVHelper.SaveToCSV(dt, @"C:\Users\lenovo\Desktop\test.csv");
+
+            return dt;
         }
     }
 }

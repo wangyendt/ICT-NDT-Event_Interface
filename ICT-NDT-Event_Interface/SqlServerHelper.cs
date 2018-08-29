@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Text;
 
 namespace ICT_NDT_Event_Interface
@@ -41,7 +40,7 @@ namespace ICT_NDT_Event_Interface
                 }
                 sb.Append(string.Join(",", str_column_value));
                 sb.Append(")");
-                Console.WriteLine(sb.ToString());
+//                Console.WriteLine(sb.ToString());
 
                 SqlCommand cmd = new SqlCommand(sb.ToString(), Conn);
 
@@ -71,22 +70,7 @@ namespace ICT_NDT_Event_Interface
                         {
                             bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping(dc.ColumnName, dc.ColumnName));
                         }
-                        //                        bulkCopy.ColumnMappings.Add("N_BX", "N_BX");//表中的字段名 第一个“id”是dt中的字段名，第二个“id”表中的字段名
-                        //                        bulkCopy.ColumnMappings.Add("N_DeviceName", "N_DeviceName");
-                        //                        bulkCopy.ColumnMappings.Add("N_TestVal", "N_TestVal");
-                        //                        bulkCopy.ColumnMappings.Add("N_Result", "N_Result");
-                        //                        bulkCopy.ColumnMappings.Add("N_DateTime", "N_DateTime");
-                        //                        bulkCopy.ColumnMappings.Add("N_BoardName", "N_BoardName");
-                        //                        bulkCopy.ColumnMappings.Add("N_BarCode", "N_BarCode");
-                        //                        bulkCopy.ColumnMappings.Add("N_OpenTest", "N_OpenTest");
-                        //                        bulkCopy.ColumnMappings.Add("N_ShortTest", "N_ShortTest");
-                        //                        bulkCopy.ColumnMappings.Add("N_VoltageResult", "N_VoltageResult");
-                        //                        bulkCopy.ColumnMappings.Add("N_ResistanceResult", "N_ResistanceResult");
-                        //                        bulkCopy.ColumnMappings.Add("N_MachineNo", "N_MachineID");
-                        //                        bulkCopy.ColumnMappings.Add("N_Operator", "N_Operator");
-                        //                        bulkCopy.ColumnMappings.Add("N_TestType", "N_TestType");
                         bulkCopy.WriteToServer(dt);
-                        //                        System.Windows.Forms.MessageBox.Show("插入成功：" + dt.Rows.Count + "行");
                     }
                     catch (Exception ex)
                     {

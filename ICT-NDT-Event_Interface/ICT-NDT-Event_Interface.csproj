@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="CreateTable.cs" />
     <Compile Include="CSVHelper.cs" />
+    <Compile Include="ExceptionHandler.cs" />
     <Compile Include="ImportFile.cs" />
     <Compile Include="ParseData.cs" />
     <Compile Include="Program.cs" />

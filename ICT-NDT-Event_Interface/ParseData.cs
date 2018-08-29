@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Text;
 
 namespace ICT_NDT_Event_Interface
@@ -147,10 +146,10 @@ namespace ICT_NDT_Event_Interface
                         if (bBXchange)
                         {
                             cyc_start_ind = (cyc_start_ind + 1) % _contents[1].Count;
-                            Console.WriteLine("*********************************");
+//                            Console.WriteLine("*********************************");
                             for (int j = batch_modify_index_start; j < i + 1 - data_offset; j++)
                             {
-                                Console.WriteLine("i: " + i + ", j:" + j + ", " + dt.Rows.Count + "  -0-0-0-0-0- " + bVoltagePass + " " + bResistancePass);
+//                                Console.WriteLine("i: " + i + ", j:" + j + ", " + dt.Rows.Count + "  -0-0-0-0-0- " + bVoltagePass + " " + bResistancePass);
                                 dt.Rows[j][9] = bVoltagePass ? "Pass" : "NG";
                                 dt.Rows[j][10] = bResistancePass ? "Pass" : "NG";
                             }
@@ -174,7 +173,7 @@ namespace ICT_NDT_Event_Interface
                 }
             }
 
-            Console.WriteLine("-------------------------------------");
+//            Console.WriteLine("-------------------------------------");
 
             foreach (var item in _contents[0])
             {
@@ -198,7 +197,7 @@ namespace ICT_NDT_Event_Interface
                 //                return;
             }
 
-            CSVHelper.SaveToCSV(dt, @"C:\Users\lenovo\Desktop\test.csv");
+//            CSVHelper.SaveToCSV(dt, @"C:\Users\lenovo\Desktop\test.csv");
 
             return dt;
         }

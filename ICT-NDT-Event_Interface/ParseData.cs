@@ -50,6 +50,11 @@ namespace ICT_NDT_Event_Interface
             }
         }
 
+        public static void ClearState()
+        {
+            _step = 0;
+        }
+
         public static DataTable parse_data_into_datatable(StringBuilder sb, object parameters)
         {
             DataTable dt = CreateTable.create_data_table();
@@ -71,7 +76,7 @@ namespace ICT_NDT_Event_Interface
             string[] strInfos = sb.ToString().Split('\n');
             for (int i = 0; i < strInfos.Length; i++)
             {
-                Console.WriteLine(_step + " " + strInfos[i]);
+                //Console.WriteLine(_step + " " + strInfos[i]);
                 if (strInfos[i].Contains(_datatable_features[1]))
                 {
                     // 如果当前行含有结束符LogEnd, 则停止解析
@@ -146,10 +151,8 @@ namespace ICT_NDT_Event_Interface
                         if (bBXchange)
                         {
                             cyc_start_ind = (cyc_start_ind + 1) % _contents[1].Count;
-//                            Console.WriteLine("*********************************");
                             for (int j = batch_modify_index_start; j < i + 1 - data_offset; j++)
                             {
-//                                Console.WriteLine("i: " + i + ", j:" + j + ", " + dt.Rows.Count + "  -0-0-0-0-0- " + bVoltagePass + " " + bResistancePass);
                                 dt.Rows[j][9] = bVoltagePass ? "Pass" : "NG";
                                 dt.Rows[j][10] = bResistancePass ? "Pass" : "NG";
                             }
@@ -168,35 +171,10 @@ namespace ICT_NDT_Event_Interface
                                 bVoltagePass = bVoltagePass && dataCurrent[(int)DataColumn.Result].Trim() == "Pass";
                             }
                         }
-                        //Console.WriteLine(dt.Rows.Count+" "+dt.Columns.Count);
                         break;
                 }
             }
-
-//            Console.WriteLine("-------------------------------------");
-
-            foreach (var item in _contents[0])
-            {
-                //                Console.WriteLine(item);
-            }
-
-            foreach (var item in _contents[1])
-            {
-                foreach (var subitem in (List<object>)item)
-                {
-                    //                    Console.WriteLine(subitem + " " + ((List<object>)item).Count + " " + _contents[1].Count);
-                }
-            }
-
-            for (int r = 0; r < dt.Rows.Count; r++)
-            {
-                for (int c = 0; c < dt.Columns.Count; c++)
-                {
-                    //                    Console.WriteLine(dt.Rows[r][c]);
-                }
-                //                return;
-            }
-
+            
 //            CSVHelper.SaveToCSV(dt, @"C:\Users\lenovo\Desktop\test.csv");
 
             return dt;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.IO;
 using System.Text;
 
 namespace ICT_NDT_Event_Interface
@@ -8,12 +9,110 @@ namespace ICT_NDT_Event_Interface
     {
         static void Main(string[] args)
         {
-            string path =  args[0];
-            ImportFile file = new ImportFile(path);
-            object parameters = file.read_parameters();
-            StringBuilder sb = file.read_log_data();
-            DataTable dt = ParseData.parse_data_into_datatable(sb, parameters);
-            SqlServerHelper.SQLConn(dt);
+            string event_path = args[0];
+            FileIO fileR = new FileIO(event_path);
+            string strRetPath = fileR.read_key_from_file("Result");
+            FileIO fileW = new FileIO(strRetPath);
+            switch (event_path)
+            {
+                case "EventStart.txt":
+                    try
+                    {
+                        fileW.write_kvp_to_file("TestCancel", "0");
+                        fileW.write_kvp_to_file("InfoText", "");
+                    }
+                    catch (Exception e)
+                    {
+                        fileW.write_kvp_to_file("TestCancel", "1");
+                        fileW.write_kvp_to_file("InfoText", e.ToString());
+                        return;
+                    }
+                    break;
+                case "EventDone.txt":
+                    try
+                    {
+                        fileW.write_kvp_to_file("TestCancel", "0");
+                        fileW.write_kvp_to_file("InfoText", "");
+                    }
+                    catch (Exception e)
+                    {
+                        fileW.write_kvp_to_file("TestCancel", "1");
+                        fileW.write_kvp_to_file("InfoText", e.ToString());
+                        return;
+                    }
+                    break;
+                case "EventResult.txt":
+                    string server, database, uid, password, table;
+                    try
+                    {
+                        INIIO ini = new INIIO(Path.GetFullPath("OffsetTest.ini"));
+                        server = ini.IniReadValue("Database", "DatabaseServer");
+                        database = ini.IniReadValue("Database", "DatabaseName");
+                        uid = ini.IniReadValue("Database", "DatabaseUserID");
+                        password = ini.IniReadValue("Database", "DatabasePassword");
+                        table = ini.IniReadValue("Table", "TableName");
+                    }
+                    catch (Exception e)
+                    {
+                        fileW.write_kvp_to_file("TestCancel", "1");
+                        fileW.write_kvp_to_file("InfoText", e.ToString());
+                        return;
+                    }
+
+                    SqlServerHelper connection;
+                    try
+                    {
+                        connection = new SqlServerHelper(server, database, uid, password, table);
+                    }
+                    catch (Exception e)
+                    {
+                        fileW.write_kvp_to_file("TestCancel", "1");
+                        fileW.write_kvp_to_file("InfoText", e.ToString());
+                        return;
+                    }
+
+                    string[] paths;
+                    object o;
+                    try
+                    {
+                        paths = fileR.read_keys_from_file("Detail");
+                        o = new[]
+                        {
+                            fileR.read_key_from_file("DeviceID"),
+                            fileR.read_key_from_file("WorkerID")
+                        };
+                    }
+                    catch (Exception e)
+                    {
+                        fileW.write_kvp_to_file("TestCancel", "1");
+                        fileW.write_kvp_to_file("InfoText", e.ToString());
+                        return;
+                    }
+
+                    try
+                    {
+                        foreach (var path in paths)
+                        {
+                            Console.WriteLine(path);
+                            StringBuilder sb = fileR.read_log_data(path);
+                            DataTable dt = ParseData.parse_data_into_datatable(
+                                sb, o);
+                            ParseData.ClearState();
+                            connection.dataToServer(dt);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        fileW.write_kvp_to_file("TestCancel", "1");
+                        fileW.write_kvp_to_file("InfoText", e.ToString());
+                        return;
+                    }
+
+                    connection.dispose();
+                    fileW.write_kvp_to_file("TestCancel", "0");
+                    fileW.write_kvp_to_file("InfoText", "");
+                    break;
+            }
             Console.ReadKey();
         }
     }

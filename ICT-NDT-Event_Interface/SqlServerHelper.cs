@@ -8,13 +8,29 @@ namespace ICT_NDT_Event_Interface
 {
     public class SqlServerHelper
     {
+        private SqlConnection _conn;
+        private string _table;
 
-        public static void SQLConn(DataTable dt)
+        public SqlServerHelper(string server, string database, string uid, string password, string table)
         {
-            SqlConnection Conn = new SqlConnection("Server=192.168.0.248;DataBase=NDTOffset;uid=OffsetTestUser;pwd=ndt@123");
+            _conn = new SqlConnection(
+                "Server=" + server + ";" +
+                "DataBase=" + database + ";" +
+                "uid=" + uid + ";" +
+                "pwd=" + password
+            //                "Server=192.168.0.248;DataBase=NDTOffset;uid=OffsetTestUser;pwd=ndt@123"
+            );
+            _conn.Open();
+            _table = table;
+        }
 
-            Conn.Open();
+        public void dispose()
+        {
+            _conn.Close();
+        }
 
+        public void dataToServer(DataTable dt)
+        {
             List<string> str_column_name = new List<string>();
             foreach (DataColumn dc in dt.Columns)
             {
@@ -24,7 +40,7 @@ namespace ICT_NDT_Event_Interface
             {
                 List<string> str_column_value = new List<string>();
                 StringBuilder sb = new StringBuilder();
-                sb.Append("INSERT INTO Test_2 (");
+                sb.Append("INSERT INTO ").Append(_table).Append(" (");
                 sb.Append(string.Join(",", str_column_name));
                 sb.Append(") VALUES (");
                 for (int c = 0; c < dt.Columns.Count; c++)
@@ -40,9 +56,8 @@ namespace ICT_NDT_Event_Interface
                 }
                 sb.Append(string.Join(",", str_column_value));
                 sb.Append(")");
-//                Console.WriteLine(sb.ToString());
 
-                SqlCommand cmd = new SqlCommand(sb.ToString(), Conn);
+                SqlCommand cmd = new SqlCommand(sb.ToString(), _conn);
 
                 DataSet ds = new DataSet();
 
@@ -50,13 +65,12 @@ namespace ICT_NDT_Event_Interface
 
                 da.Fill(ds);
             }
-
-            Conn.Close();
         }
 
-        public static void DataTableToSQLServer(DataTable dt)
+        public void DataTableToSQLServer(DataTable dt)
         {
-            string connectionString = @"Persist Security Info=False;Initial Catalog=NDTOffset;Data Source=192.168.0.248; User ID=OffsetTestUser; Password=ndt@123";
+            string connectionString =
+                @"Persist Security Info=False;Initial Catalog=NDTOffset;Data Source=192.168.0.248; User ID=OffsetTestUser; Password=ndt@123";
             using (SqlConnection destinationConnection = new SqlConnection(connectionString))
             {
                 destinationConnection.Open();
@@ -64,7 +78,7 @@ namespace ICT_NDT_Event_Interface
                 {
                     try
                     {
-                        bulkCopy.DestinationTableName = "Test_2";//要插入的表的表名
+                        bulkCopy.DestinationTableName = "Test_2"; //要插入的表的表名
                         bulkCopy.BatchSize = dt.Rows.Count;
                         foreach (DataColumn dc in dt.Columns)
                         {

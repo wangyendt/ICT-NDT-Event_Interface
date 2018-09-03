@@ -1,4 +1,5 @@
-﻿SELECT TOP 100 * FROM Test_2 WHERE N_BarCode = 'asdf9'
+﻿SELECT TOP 100 * FROM Test_2 WHERE N_BarCode = 'barcode_data3'
+
 INSERT INTO  Test_2
            (N_BX
            ,N_DeviceName

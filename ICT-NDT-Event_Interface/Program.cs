@@ -19,26 +19,30 @@ namespace ICT_NDT_Event_Interface
                 case "TestStart":
                     try
                     {
+                        fileW.clear();
                         fileW.write_kvp_to_file("TestCancel", "0");
                         fileW.write_kvp_to_file("InfoText", "");
                     }
                     catch (Exception e)
                     {
+                        fileW.clear();
                         fileW.write_kvp_to_file("TestCancel", "1");
-                        fileW.write_kvp_to_file("InfoText", e.ToString());
+                        fileW.write_kvp_to_file("InfoText", e.ToString().Split('\n')[0]);
                         return;
                     }
                     break;
                 case "TestDone":
                     try
                     {
+                        fileW.clear();
                         fileW.write_kvp_to_file("TestCancel", "0");
                         fileW.write_kvp_to_file("InfoText", "");
                     }
                     catch (Exception e)
                     {
+                        fileW.clear();
                         fileW.write_kvp_to_file("TestCancel", "1");
-                        fileW.write_kvp_to_file("InfoText", e.ToString());
+                        fileW.write_kvp_to_file("InfoText", e.ToString().Split('\n')[0]);
                         return;
                     }
                     break;
@@ -55,8 +59,9 @@ namespace ICT_NDT_Event_Interface
                     }
                     catch (Exception e)
                     {
+                        fileW.clear();
                         fileW.write_kvp_to_file("TestCancel", "1");
-                        fileW.write_kvp_to_file("InfoText", e.ToString());
+                        fileW.write_kvp_to_file("InfoText", e.ToString().Split('\n')[0]);
                         return;
                     }
 
@@ -67,8 +72,9 @@ namespace ICT_NDT_Event_Interface
                     }
                     catch (Exception e)
                     {
+                        fileW.clear();
                         fileW.write_kvp_to_file("TestCancel", "1");
-                        fileW.write_kvp_to_file("InfoText", e.ToString());
+                        fileW.write_kvp_to_file("InfoText", e.ToString().Split('\n')[0]);
                         return;
                     }
 
@@ -85,8 +91,9 @@ namespace ICT_NDT_Event_Interface
                     }
                     catch (Exception e)
                     {
+                        fileW.clear();
                         fileW.write_kvp_to_file("TestCancel", "1");
-                        fileW.write_kvp_to_file("InfoText", e.ToString());
+                        fileW.write_kvp_to_file("InfoText", e.ToString().Split('\n')[0]);
                         return;
                     }
 
@@ -104,17 +111,18 @@ namespace ICT_NDT_Event_Interface
                     }
                     catch (Exception e)
                     {
+                        fileW.clear();
                         fileW.write_kvp_to_file("TestCancel", "1");
-                        fileW.write_kvp_to_file("InfoText", e.ToString());
+                        fileW.write_kvp_to_file("InfoText", e.ToString().Split('\n')[0]);
                         return;
                     }
 
                     connection.dispose();
+                    fileW.clear();
                     fileW.write_kvp_to_file("TestCancel", "0");
                     fileW.write_kvp_to_file("InfoText", "");
                     break;
             }
-            Console.ReadKey();
         }
     }
 }

@@ -14,8 +14,13 @@ namespace ICT_NDT_Event_Interface
 
         public FileIO(string path)
         {
-            _strLines = File.ReadAllLines(path, Encoding.Default);
             _path = path;
+            init();
+        }
+
+        private void init()
+        {
+            _strLines = File.ReadAllLines(_path, Encoding.Default);
         }
 
         private List<string> get_value_from_key(string value)
@@ -53,7 +58,7 @@ namespace ICT_NDT_Event_Interface
 
         public StringBuilder read_log_data(string path)
         {
-            using (TextFieldParser parser = new TextFieldParser(path))
+            using (TextFieldParser parser = new TextFieldParser(path, Encoding.Default))
             {
                 StringBuilder sb = new StringBuilder();
                 parser.TextFieldType = FieldType.Delimited;
@@ -66,9 +71,24 @@ namespace ICT_NDT_Event_Interface
             }
         }
 
+        public void clear()
+        {
+            if (File.Exists(_path))
+            {
+                File.Delete(_path);
+            }
+            using (FileStream fs = new FileStream(_path, FileMode.Create, FileAccess.Write))
+            {
+                fs.Write(new byte[1], 0, 0);
+                fs.Close();
+                fs.Dispose();
+            }
+            init();
+        }
+
         public void write_kvp_to_file(string key, string value)
         {
-            string strNewKVP = key + " = " + value;
+            string strNewKVP = key + " = " + value.Trim('\n', ' ');
             bool hasModified = false;
             for (int i = 0; i < _strLines.Length; i++)
             {
@@ -97,6 +117,7 @@ namespace ICT_NDT_Event_Interface
                             return list.ToArray();
                         })(_strLines, strNewKVP);
             }
+            Console.WriteLine(strNewKVP);
             File.WriteAllLines(
                 _path,
                 _strLines,

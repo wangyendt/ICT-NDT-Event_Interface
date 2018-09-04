@@ -11,11 +11,12 @@ namespace ICT_NDT_Event_Interface
         {
             string event_path = args[0];
             FileIO fileR = new FileIO(event_path);
+            string event_ID = fileR.read_key_from_file("Event");
             string strRetPath = fileR.read_key_from_file("Result");
             FileIO fileW = new FileIO(strRetPath);
-            switch (event_path)
+            switch (event_ID)
             {
-                case "EventStart.txt":
+                case "TestStart":
                     try
                     {
                         fileW.write_kvp_to_file("TestCancel", "0");
@@ -28,7 +29,7 @@ namespace ICT_NDT_Event_Interface
                         return;
                     }
                     break;
-                case "EventDone.txt":
+                case "TestDone":
                     try
                     {
                         fileW.write_kvp_to_file("TestCancel", "0");
@@ -41,7 +42,7 @@ namespace ICT_NDT_Event_Interface
                         return;
                     }
                     break;
-                case "EventResult.txt":
+                case "TestResult":
                     string server, database, uid, password, table;
                     try
                     {

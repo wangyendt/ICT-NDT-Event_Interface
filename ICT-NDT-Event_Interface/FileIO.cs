@@ -20,6 +20,10 @@ namespace ICT_NDT_Event_Interface
 
         private void init()
         {
+            if (!File.Exists(_path))
+            {
+                File.WriteAllBytes(_path,new byte[0]);
+            }
             _strLines = File.ReadAllLines(_path, Encoding.Default);
         }
 

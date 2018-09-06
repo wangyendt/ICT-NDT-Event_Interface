@@ -73,7 +73,7 @@ namespace ICT_NDT_Event_Interface
             int batch_modify_index_start = 0;   // 批量修改的索引开始处
             int data_offset = 0;   // 数据块首次出现的位置相对于整个文件的偏移(行数)
 
-            string[] strInfos = sb.ToString().Split('\n');
+            string[] strInfos = sb.ToString().Replace("\"","").Split('\n');
             for (int i = 0; i < strInfos.Length; i++)
             {
                 //Console.WriteLine(_step + " " + strInfos[i]);

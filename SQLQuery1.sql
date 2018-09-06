@@ -16,4 +16,7 @@ INSERT INTO  Test_2
            ,N_Operator
            ,N_TestType)
      VALUES
-           ('B1','��V3-CH3',-0.057,'Pass','20180621 04:17:00','asdf4','ADC','Pass','Pass','Pass','Pass','1234','James','V')
+           ('B1','��V3-CH3',-0.057,'Pass','20180906 05:11:45','asdf4','ADC','Pass','Pass','Pass','Pass','1234','James','V')
+
+
+DELETE dbo.Test_2

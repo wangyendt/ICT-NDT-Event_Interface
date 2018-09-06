@@ -1,4 +1,4 @@
-﻿SELECT TOP 100 * FROM Test_2 WHERE N_BarCode = 'barcode_data4'
+﻿SELECT TOP 100 * FROM Test_2 WHERE N_BoardName = 'PT051_S3_V2_MEKTEC'
 
 INSERT INTO  Test_2
            (N_BX

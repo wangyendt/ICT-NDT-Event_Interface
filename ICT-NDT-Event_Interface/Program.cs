@@ -50,7 +50,8 @@ namespace ICT_NDT_Event_Interface
                     string server, database, uid, password, table;
                     try
                     {
-                        INIIO ini = new INIIO(Path.GetFullPath("OffsetTest.ini"));
+                        INIIO ini = new INIIO(AppDomain.CurrentDomain.SetupInformation.ApplicationBase +
+                                              "OffsetTest.ini");
                         server = ini.IniReadValue("Database", "DatabaseServer");
                         database = ini.IniReadValue("Database", "DatabaseName");
                         uid = ini.IniReadValue("Database", "DatabaseUserID");

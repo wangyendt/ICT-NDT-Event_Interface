@@ -55,7 +55,7 @@ namespace ICT_NDT_Event_Interface
             _step = 0;
         }
 
-        public static DataTable parse_data_into_datatable(StringBuilder sb, object parameters)
+        public static DataTable parse_data_into_datatable(StringBuilder sb, object parameters, int lotNoLen)
         {
             DataTable dt = CreateTable.create_data_table();
             create_features();
@@ -73,7 +73,10 @@ namespace ICT_NDT_Event_Interface
             int batch_modify_index_start = 0;   // 批量修改的索引开始处
             int data_offset = 0;   // 数据块首次出现的位置相对于整个文件的偏移(行数)
 
-            string[] strInfos = sb.ToString().Replace("\"","").Split('\n');
+            int barcode_len = lotNoLen;
+            string lotNo = "";
+
+            string[] strInfos = sb.ToString().Replace("\"", "").Split('\n');
             for (int i = 0; i < strInfos.Length; i++)
             {
                 //Console.WriteLine(_step + " " + strInfos[i]);
@@ -95,6 +98,12 @@ namespace ICT_NDT_Event_Interface
                                     str_ = Convert.ToDateTime(str_).ToString("yyyyMMdd hh:mm:ss");
                                 }
                                 _contents[_step].Add(str_);
+                                if (fea.Contains("BarCode"))
+                                {
+                                    barcode_len = Math.Min(barcode_len, str_.Length);
+                                    lotNo = str_.Substring(0, barcode_len);
+                                    _contents[_step].Add(lotNo);
+                                }
                                 _head_features.RemoveAt(0);
                                 if (_head_features.Count == 0)
                                 {
@@ -140,6 +149,7 @@ namespace ICT_NDT_Event_Interface
                             _contents[0][0],
                             _contents[0][1],
                             _contents[0][2],
+                            _contents[0][3],
                             ((List<object>)_contents[1][cyc_start_ind])[0],
                             ((List<object>)_contents[1][cyc_start_ind])[1],
                             null,
@@ -174,8 +184,8 @@ namespace ICT_NDT_Event_Interface
                         break;
                 }
             }
-            
-//            CSVHelper.SaveToCSV(dt, @"C:\Users\lenovo\Desktop\test.csv");
+
+            //            CSVHelper.SaveToCSV(dt, @"C:\Users\lenovo\Desktop\test.csv");
 
             return dt;
         }

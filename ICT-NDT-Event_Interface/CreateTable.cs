@@ -15,6 +15,7 @@ namespace ICT_NDT_Event_Interface
                 dataTable.Columns.Add("N_DateTime", typeof(string));
                 dataTable.Columns.Add("N_BoardName", typeof(string));
                 dataTable.Columns.Add("N_BarCode", typeof(string));
+                dataTable.Columns.Add("N_LotNo", typeof(string));
                 dataTable.Columns.Add("N_OpenTest", typeof(string));
                 dataTable.Columns.Add("N_ShortTest", typeof(string));
                 dataTable.Columns.Add("N_VoltageResult", typeof(string));

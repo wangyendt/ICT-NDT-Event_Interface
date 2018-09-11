@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.IO;
 using System.Text;
 
 namespace ICT_NDT_Event_Interface
@@ -48,6 +47,7 @@ namespace ICT_NDT_Event_Interface
                     break;
                 case "TestResult":
                     string server, database, uid, password, table;
+                    int lot_no_len;
                     try
                     {
                         INIIO ini = new INIIO(AppDomain.CurrentDomain.SetupInformation.ApplicationBase +
@@ -57,6 +57,7 @@ namespace ICT_NDT_Event_Interface
                         uid = ini.IniReadValue("Database", "DatabaseUserID");
                         password = ini.IniReadValue("Database", "DatabasePassword");
                         table = ini.IniReadValue("Table", "TableName");
+                        lot_no_len = int.Parse(ini.IniReadValue("BarCode", "LotNoLen"));
                     }
                     catch (Exception e)
                     {
@@ -105,7 +106,7 @@ namespace ICT_NDT_Event_Interface
                             Console.WriteLine(path);
                             StringBuilder sb = fileR.read_log_data(path);
                             DataTable dt = ParseData.parse_data_into_datatable(
-                                sb, o);
+                                sb, o, lot_no_len);
                             ParseData.ClearState();
                             connection.dataToServer(dt);
                         }

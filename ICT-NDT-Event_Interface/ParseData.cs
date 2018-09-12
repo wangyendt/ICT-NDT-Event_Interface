@@ -55,8 +55,11 @@ namespace ICT_NDT_Event_Interface
             _step = 0;
         }
 
-        public static DataTable parse_data_into_datatable(StringBuilder sb, object parameters, int lotNoLen)
+        public static DataTable parse_data_into_datatable(StringBuilder sb, object parameters, object[] ini_parameters)
         {
+            int lotNoLen = (int)ini_parameters[0];
+            int sheetNoLen = (int)ini_parameters[1];
+
             DataTable dt = CreateTable.create_data_table();
             create_features();
             create_content();
@@ -73,8 +76,9 @@ namespace ICT_NDT_Event_Interface
             int batch_modify_index_start = 0;   // 批量修改的索引开始处
             int data_offset = 0;   // 数据块首次出现的位置相对于整个文件的偏移(行数)
 
-            int barcode_len = lotNoLen;
-            string lotNo = "";
+            int lot_no_len = lotNoLen;
+            int sheet_no_len = sheetNoLen;
+            string lotNo, sheetNo;
 
             string[] strInfos = sb.ToString().Replace("\"", "").Split('\n');
             for (int i = 0; i < strInfos.Length; i++)
@@ -100,9 +104,12 @@ namespace ICT_NDT_Event_Interface
                                 _contents[_step].Add(str_);
                                 if (fea.Contains("BarCode"))
                                 {
-                                    barcode_len = Math.Min(barcode_len, str_.Length);
-                                    lotNo = str_.Substring(0, barcode_len);
+                                    lot_no_len = Math.Min(lot_no_len, str_.Length);
+                                    lotNo = str_.Substring(0, lot_no_len);
+                                    sheet_no_len = Math.Min(sheet_no_len, str_.Length);
+                                    sheetNo = str_.Substring(0, sheet_no_len);
                                     _contents[_step].Add(lotNo);
+                                    _contents[_step].Add(sheetNo);
                                 }
                                 _head_features.RemoveAt(0);
                                 if (_head_features.Count == 0)
@@ -150,6 +157,7 @@ namespace ICT_NDT_Event_Interface
                             _contents[0][1],
                             _contents[0][2],
                             _contents[0][3],
+                            _contents[0][4],
                             ((List<object>)_contents[1][cyc_start_ind])[0],
                             ((List<object>)_contents[1][cyc_start_ind])[1],
                             null,
@@ -163,8 +171,8 @@ namespace ICT_NDT_Event_Interface
                             cyc_start_ind = (cyc_start_ind + 1) % _contents[1].Count;
                             for (int j = batch_modify_index_start; j < i + 1 - data_offset; j++)
                             {
-                                dt.Rows[j][9] = bVoltagePass ? "Pass" : "NG";
-                                dt.Rows[j][10] = bResistancePass ? "Pass" : "NG";
+                                dt.Rows[j][11] = bVoltagePass ? "Pass" : "NG";
+                                dt.Rows[j][12] = bResistancePass ? "Pass" : "NG";
                             }
                             batch_modify_index_start = i + 1 - data_offset;
                             bVoltagePass = true;
